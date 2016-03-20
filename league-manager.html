@@ -1,0 +1,73 @@
+<head>
+  <title>ABC League Manager</title>
+	<!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>-->
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+
+<body>
+<div class="container">
+  <h1>Arch Badminton Center MD League Manager</h1>
+
+	<form class="view-all-players">
+		<input type="checkbox" checked="{{viewAllPlayers}}"/>
+		View All players
+	</form>
+
+	<table class="table">
+		<thead>
+		<tr>
+			<th>Name</th>
+			<th>Current</th>
+			<th>Previous</th>
+			<th>Fee</th>
+			<th>Group</th>
+			<th>Court</th>
+			<th>Time</th>
+			<th>Play next Tuesday?</th>
+			<th>Game 1</th>
+			<th>Game 2</th>
+			<th>Game 3</th>
+			<th>Net Points</th>
+		</tr>
+		</thead>
+		<tbody>
+			{{#each players}}
+				{{> player}}
+			{{/each}}
+		</tbody>
+	</table>
+</div>
+</body>
+
+<template name="player">
+	<tr>
+		<td>{{name}}</td>
+		<td>{{score.current}}</td>
+		<td>{{score.prev}}</td>
+		<td>{{feePaid}}</td>
+		<td>{{group}}</td>
+		<td>{{court}}</td>
+		<td>{{time}}</td>
+		{{#if isDummy name}}
+			<td><input type="checkbox" checked="{{playNextLeague}}" class="toggle-checked"/></td>
+			{{#if playNextLeague}}
+				<td>
+					<form class="game-1">
+						<input type="text" class="text" name="text" placeholder="{{game1}}" maxlength="2"/>
+					</form>
+				</td>
+				<td>
+					<form class="game-2">
+						<input type="text" class="text" name="text" placeholder="{{game2}}" maxlength="2"/>
+					</form>
+				</td>
+				<td>
+					<form class="game-3">
+						<input type="text" class="text" name="text" placeholder="{{game3}}" maxlength="2"/>
+					</form>
+				</td>
+				<td>{{netPoints}}</td>
+			{{/if}}
+		{{/if}}
+	</tr>
+</template>

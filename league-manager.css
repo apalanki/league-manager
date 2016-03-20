@@ -1,0 +1,13 @@
+/* CSS declarations go here */
+.table td {
+    text-align: center;
+}
+
+.table th {
+    text-align: center;
+}
+
+.text {
+    width: 35px;
+    text-align: center;
+}
