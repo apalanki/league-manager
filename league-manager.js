@@ -1,5 +1,6 @@
-Players = new Mongo.Collection("players");
+//mongodb://league-user:UdT-dbS-f9G-JYF@ds025469.mlab.com:25469/heroku_w0rpvcv4"
 
+Players = new Mongo.Collection("players");
 var GroupCourtTime =
 {
     A: {
