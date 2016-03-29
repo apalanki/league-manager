@@ -65,6 +65,18 @@ function addGroupCourtAndTime(playersList) {
 }
 
 if (Meteor.isClient) {
+
+    ReactiveTabs.createInterface({
+        template: 'basicTabs',
+        onChange: function (slug) {
+            if(slug==='updateScores'){
+                Session.set('updateMode', true);
+            } else {
+                Session.set('updateMode', false);
+            }
+        }
+    });
+
     Template.body.helpers({
         players: function () {
             var playersList = [];
@@ -74,10 +86,21 @@ if (Meteor.isClient) {
                 playersList = Players.find({playNextLeague:{$ne:false}},{sort: {"score.current":-1}}).fetch();
                 return addGroupCourtAndTime(playersList);
             }
-
         },
         viewAllPlayers: function(){
             return Session.get("viewAllPlayers");
+        },
+        allPlayerMode: function(){
+            return !Session.get("viewAllPlayers");
+        },
+        tabs: function () {
+            return [
+                {name: 'Current League Table', slug: 'leagueTable'},
+                {name: 'Add League Scores', slug: 'updateScores'}
+            ];
+        },
+        updateMode: function(){
+            return Session.get('updateMode');
         }
     });
 
@@ -90,6 +113,10 @@ if (Meteor.isClient) {
     Template.player.events({
         "click .toggle-checked" : function(){
             Meteor.call("togglePlayNextLeague", this._id, !this.playNextLeague);
+        },
+        "submit .feePaid": function(event){
+            event.preventDefault();
+            Meteor.call("updateFeePaid", this._id, event.target.text.value);
         },
         "submit .game-1": function(event){
             event.preventDefault();
@@ -108,6 +135,12 @@ if (Meteor.isClient) {
     Template.player.helpers({
         isDummy: function(name) {
             return !(name==='Dummy');
+        },
+        updateMode: function(){
+            return Session.get('updateMode');
+        },
+        allPlayerMode: function(){
+            return !Session.get("viewAllPlayers");
         }
     });
 }
@@ -115,6 +148,9 @@ if (Meteor.isClient) {
 Meteor.methods({
     togglePlayNextLeague: function(playerId, nextLeague){
         Players.update(playerId, {$set: {playNextLeague: nextLeague}})
+    },
+    updateFeePaid: function(playerId, feePaid){
+        Players.update(playerId, {$set: {feePaid: feePaid}});
     },
     updateGame1Score: function(playerId, score, game1Score){
         Players.update(playerId, {$set: {game1: game1Score, "score.previous": score.current, "score.current": score.current - (21-game1Score)}});
